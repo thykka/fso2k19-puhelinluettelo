@@ -26,3 +26,18 @@ Content-Type: application/json
 
 # @name deletePerson
 DELETE {{apiUrl}}/persons/{{personId}}
+
+###
+
+# @name postPersonFail
+POST {{apiUrl}}/persons
+Content-Type: application/json
+
+{
+  "name": "Test Person"
+}
+
+###
+
+# @name endpointFail
+GET {{apiUrl}}/wrongendpoint

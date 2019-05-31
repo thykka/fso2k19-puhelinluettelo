@@ -1,10 +1,35 @@
 const express = require('express');
 const app = express();
 const bodyParser = require('body-parser');
+const morgan = require('morgan');
 
 const API_URL = '/api/persons';
 
 app.use(bodyParser.json());
+
+const logger = morgan(function(tokens, req, res) {
+  console.log(Object.keys(req.body));
+  return [
+    tokens.method(req, res),
+    tokens.url(req, res),
+    tokens.status(req, res),
+    tokens.res(req, res, 'content-length'), '-',
+    tokens['response-time'](req, res), 'ms',
+    JSON.stringify(req.body),
+  ].join(' ');
+});
+
+app.use(logger);
+
+const requestLogger = (req, res, next) => {
+  const { method, path, body } = req;
+  console.log({
+    method, path, body
+  });
+  next();
+};
+
+// app.use(requestLogger);
 
 let persons = [
   {
@@ -15,10 +40,14 @@ let persons = [
 ];
 
 // https://jsperf.com/generateid-01/1
-const generateId = (items) => 1 + items.reduceRight(
-  (max, item) => item.id < max ? max : item.id,
-  -1
-);
+const generateId = (items) => {
+  let id = '';
+  do {
+    if(id !== '') console.log('ID Collision: ' + id);
+    id = Math.random().toString(32).slice(-8);
+  } while(items.find(item => item.id === id));
+  return '' + id;
+};
 
 app.get('/info', (req, res) => {
   res.send(`<section>
@@ -49,6 +78,11 @@ app.post(API_URL, (req, res) => {
       error: 'no name'
     });
   }
+  if(persons.find(person => person.name === name)) {
+    return res.status(400).json({
+      error: 'person already exists'
+    });
+  }
 
   const person = {
     name, number,
@@ -74,3 +108,8 @@ app.listen(port, () => {
   console.log('Listening: http://localhost:' + port);
 });
 
+const unknownEndpoint = (req, res) => {
+  res.status(404).send({ error: 'unknown endpoint' });
+};
+
+app.use(unknownEndpoint);
