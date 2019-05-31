@@ -7,7 +7,7 @@ const cors = require('cors');
 const API_URL = '/api/persons';
 
 app.use(cors());
-
+app.use(express.static('build'));
 app.use(bodyParser.json());
 
 const logger = morgan(function(tokens, req, res) {
@@ -64,8 +64,8 @@ app.get(API_URL, (req, res) => {
 });
 
 app.get(API_URL + '/:id', (req, res) => {
-  const id = parseInt(req.params.id, 10);
-  const person = persons.find(person => person.id === id);
+  const id = req.params.id;
+  const person = persons.find(person => person.id == id);
 
   if(!person) {
     res.status(404).end();
@@ -98,8 +98,8 @@ app.post(API_URL, (req, res) => {
 });
 
 app.delete(API_URL + '/:id', (req, res) => {
-  const id = parseInt(req.params.id, 10);
-  persons = persons.filter(person => person.id !== id);
+  const id = req.params.id;
+  persons = persons.filter(person => person.id != id);
 
   res.status(204).end();
   console.log(persons);
