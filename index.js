@@ -2,12 +2,15 @@ const express = require('express');
 const app = express();
 const bodyParser = require('body-parser');
 
+const API_URL = '/api/persons';
+
 app.use(bodyParser.json());
 
 let persons = [
   {
     id: 0,
-    name: 'heheee'
+    name: 'Test Person',
+    number: '000-0000000'
   }
 ];
 
@@ -17,16 +20,18 @@ const generateId = (items) => 1 + items.reduceRight(
   -1
 );
 
-
-app.get('/', (req, res) => {
-  res.send('Hello, World!');
+app.get('/info', (req, res) => {
+  res.send(`<section>
+  <p>Puhelinluettelossa ${ persons.length } henkilön tiedot</p>
+  <p>${ new Date() }</p>
+</section>`);
 });
 
-app.get('/persons', (req, res) => {
+app.get(API_URL, (req, res) => {
   res.json(persons);
 });
 
-app.get('/persons/:id', (req, res) => {
+app.get(API_URL + '/:id', (req, res) => {
   const id = parseInt(req.params.id, 10);
   const person = persons.find(person => person.id === id);
 
@@ -37,7 +42,7 @@ app.get('/persons/:id', (req, res) => {
   res.json(person);
 });
 
-app.post('/persons', (req, res) => {
+app.post(API_URL, (req, res) => {
   const { name, number } = req.body;
   if(!name) {
     return res.status(400).json({
@@ -55,7 +60,7 @@ app.post('/persons', (req, res) => {
   res.json(person);
 });
 
-app.delete('/persons/:id', (req, res) => {
+app.delete(API_URL + '/:id', (req, res) => {
   const id = parseInt(req.params.id, 10);
   persons = persons.filter(person => person.id !== id);
 

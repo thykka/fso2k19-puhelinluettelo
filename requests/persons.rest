@@ -1,0 +1,28 @@
+@apiUrl = http://localhost:3001/api
+
+###
+
+# @name getPersons
+GET {{apiUrl}}/persons
+
+###
+
+# @name getPerson
+@personId = 0
+GET {{apiUrl}}/persons/{{personId}}
+
+###
+
+# @name postPerson
+POST {{apiUrl}}/persons
+Content-Type: application/json
+
+{
+  "name": "Rest Test",
+  "number": "200"
+}
+
+###
+
+# @name deletePerson
+DELETE {{apiUrl}}/persons/{{personId}}
