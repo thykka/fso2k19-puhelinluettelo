@@ -13,14 +13,6 @@ app.use(express.static('build'));
 app.use(bodyParser.json());
 app.use(logger);
 
-let persons = [
-  {
-    id: 0,
-    name: 'Test Person',
-    number: '000-0000000'
-  }
-];
-
 app.get('/info', (req, res) => {
   Person.find({})
     .then(people => res.send(
