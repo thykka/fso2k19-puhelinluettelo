@@ -8,7 +8,7 @@ GET {{apiUrl}}/persons
 ###
 
 # @name getPerson
-@personId = 5d133ffbde59155307fc15cd
+@personId = 5d134f7d0e021e00048d19d0
 GET {{apiUrl}}/persons/{{personId}}
 
 ###
@@ -29,8 +29,8 @@ PUT {{apiUrl}}/persons/{{personId}}
 Content-Type: application/json
 
 {
-  "name": "Charles Changed",
-  "number": "200"
+  "name": "Johan Pomppas",
+  "number": "0408000"
 }
 
 ###

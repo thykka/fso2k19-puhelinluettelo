@@ -63,13 +63,20 @@ app.put(API_URL + '/:id', (req, res, next) => {
   const { name, number } = req.body;
 
   const personData = { name, number };
+  const person = new Person({ name, number });
+  console.log(person);
 
   Person.findByIdAndUpdate(
-    req.params.id, personData, { new: true }
-  ).then(updatedPerson => {
-    res.json(updatedPerson.toJSON());
-  }).catch(err => next(err));
-
+    req.params.id, personData, {
+      new: true,
+      runValidators: true,
+      context: 'query'
+    }
+  )
+    .then(updatedPerson => {
+      res.json(updatedPerson.toJSON());
+    })
+    .catch(err => next(err));
 });
 
 app.delete(API_URL + '/:id', (req, res, next) => {

@@ -1,6 +1,7 @@
 const morgan = require('morgan');
 module.exports = morgan(function(tokens, req, res) {
   return [
+    '[L]',
     tokens.method(req, res),
     tokens.url(req, res),
     tokens.status(req, res),

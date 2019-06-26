@@ -24,11 +24,13 @@ const personSchema = new mongoose.Schema({
     type: String,
     required: true,
     unique: true,
+    minlength: 3,
   },
   number: {
     type: String,
     required: true,
     unique: true,
+    minlength: 7, // https://fi.wikipedia.org/wiki/Matkapuhelinnumerot_Suomessa#Numeron_muoto
   },
 });
 
