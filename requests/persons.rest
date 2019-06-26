@@ -8,7 +8,7 @@ GET {{apiUrl}}/persons
 ###
 
 # @name getPerson
-@personId = 0
+@personId = 5d1326438e3f73487b9ba465
 GET {{apiUrl}}/persons/{{personId}}
 
 ###

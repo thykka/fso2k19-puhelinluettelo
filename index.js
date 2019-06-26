@@ -33,7 +33,7 @@ const requestLogger = (req, res, next) => {
   next();
 };
 
-// app.use(requestLogger);
+app.use(requestLogger);
 
 let persons = [
   {
@@ -58,14 +58,10 @@ app.get(API_URL, (req, res) => {
 });
 
 app.get(API_URL + '/:id', (req, res) => {
-  const id = req.params.id;
-  const person = persons.find(person => person.id == id);
-
-  if(!person) {
-    res.status(404).end();
-    return;
-  }
-  res.json(person);
+  const { id } = req.params;
+  Person.findById(id)
+    .then(person => res.json(person.toJSON()))
+    .catch(err => res.json(err));
 });
 
 app.post(API_URL, (req, res) => {
@@ -75,28 +71,25 @@ app.post(API_URL, (req, res) => {
       error: 'no name'
     });
   }
+  /* TODO
   if(persons.find(person => person.name === name)) {
     return res.status(400).json({
       error: 'person already exists'
     });
   }
+  */
 
-  const person = {
-    name, number,
-    id: generateId(persons)
-  };
+  const person = new Person({ name, number });
+  person.save()
+    .then(savedPerson => res.json(savedPerson.toJSON()));
 
-  persons = [ ...persons, person ];
-
-  res.json(person);
 });
 
 app.delete(API_URL + '/:id', (req, res) => {
-  const id = req.params.id;
-  persons = persons.filter(person => person.id != id);
-
-  res.status(204).end();
-  console.log(persons);
+  Person.findOneAndDelete(
+    { _id: req.params.id },
+    () => res.status(204).end()
+  );
 });
 
 const PORT = process.env.PORT || 3001;
