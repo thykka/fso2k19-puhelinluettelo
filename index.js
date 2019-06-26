@@ -3,6 +3,7 @@ const app = express();
 const bodyParser = require('body-parser');
 const morgan = require('morgan');
 const cors = require('cors');
+const Person = require('./models/person');
 
 const API_URL = '/api/persons';
 
@@ -42,16 +43,6 @@ let persons = [
   }
 ];
 
-// https://jsperf.com/generateid-01/1
-const generateId = (items) => {
-  let id = '';
-  do {
-    if(id !== '') console.log('ID Collision: ' + id);
-    id = Math.random().toString(32).slice(-8);
-  } while(items.find(item => item.id === id));
-  return '' + id;
-};
-
 app.get('/info', (req, res) => {
   res.send(`<section>
   <p>Puhelinluettelossa ${ persons.length } henkilön tiedot</p>
@@ -60,7 +51,10 @@ app.get('/info', (req, res) => {
 });
 
 app.get(API_URL, (req, res) => {
-  res.json(persons);
+  Person.find({})
+    .then(people => res.json(
+      people.map(person => person.toJSON())
+    ));
 });
 
 app.get(API_URL + '/:id', (req, res) => {
