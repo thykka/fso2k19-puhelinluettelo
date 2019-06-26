@@ -8,7 +8,7 @@ GET {{apiUrl}}/persons
 ###
 
 # @name getPerson
-@personId = 5d1326438e3f73487b9ba465
+@personId = 5d133ffbde59155307fc15cd
 GET {{apiUrl}}/persons/{{personId}}
 
 ###
@@ -18,7 +18,18 @@ POST {{apiUrl}}/persons
 Content-Type: application/json
 
 {
-  "name": "Rest Test",
+  "name": "Rest Test 2",
+  "number": "300"
+}
+
+###
+
+# @name putPerson
+PUT {{apiUrl}}/persons/{{personId}}
+Content-Type: application/json
+
+{
+  "name": "Charles Changed",
   "number": "200"
 }
 
@@ -36,6 +47,11 @@ Content-Type: application/json
 {
   "name": "Test Person"
 }
+
+###
+
+# @name info
+GET http://localhost:3001/info
 
 ###
 
