@@ -49,6 +49,8 @@ function listPersons() {
   });
 }
 
+// This is for testing, we wanna keep it, but not call it.
+// eslint-disable-next-line no-unused-vars
 function newPerson() {
   const person = new Person({
     name: 'Kamehameha',
